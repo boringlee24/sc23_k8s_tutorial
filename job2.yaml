@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job2-baolin
+spec:
+  completionMode: Indexed
+  completions: 10
+  parallelism: 10
+  ttlSecondsAfterFinished: 1800
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: mypod
+        image: rockylinux:8
+        resources:
+           limits:
+             memory: 100Mi
+             cpu: 0.1
+           requests:
+             memory: 100Mi
+             cpu: 0.1
+        command: ["sh", "-c", "let s=10+2*$JOB_COMPLETION_INDEX; date; sleep $s; date; echo Done $JOB_COMPLETION_INDEX"]

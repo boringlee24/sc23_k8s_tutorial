@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: c4p-baolin
+spec:
+  completions: 1
+  ttlSecondsAfterFinished: 1800
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: mypod
+        image: cicirello/pyaction:latest
+        resources:
+          limits:
+            memory: 100Mi
+            cpu: 1
+          requests:
+            memory: 100Mi
+            cpu: 1
+        command: ["sh", "-c", "git clone https://github.com/PRP-Workshop/SC23-code-private.git && cd SC23-code-private && python3 ./pi.py && echo Done"]

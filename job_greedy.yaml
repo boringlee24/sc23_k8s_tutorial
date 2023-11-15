@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: jb1-baolin
+spec:
+  completions: 1
+  ttlSecondsAfterFinished: 1800
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: mypod
+        image: rockylinux:8
+        resources:
+          limits:
+            memory: 800Gi
+            cpu: 110
+          requests:
+            memory: 800Gi
+            cpu: 110
+        command: ["sh", "-c", "df -H /dev/shm; sleep 10"]
+        volumeMounts:
+        - name: ramdisk1
+          mountPath: /dev/shm
+      volumes:
+      - name: ramdisk1
+        emptyDir:
+          medium: Memory
